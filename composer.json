@@ -1,9 +1,9 @@
 {
-    "name": "onming/wechat-php-sdk",
-    "description": "微信php-sdk",
-    "version": "1.0.3",
+    "name": "onming/es-php-sdk",
+    "description": "es-php-sdk",
+    "version": "1.0.0",
     "keywords": [
-        "php", "wechat", "wechat-php-sdk"
+        "php", "elasticsearch", "es-php-sdk"
     ],
     "license": "MIT",
     "authors": [{
@@ -11,11 +11,11 @@
         "email": "170893265@qq.com"
     }],
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.2"
     },
     "autoload": {
         "psr-4": {
-            "Onming\\WechatPhpSdk\\": "src/"
+            "Onming\\EsPhpSdk\\": "src/"
         }
     }
 }
