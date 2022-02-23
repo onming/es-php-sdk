@@ -7,13 +7,13 @@ elasticsearch sdk插件
     您可以通过`php -v`命令查看当前的 PHP 版本。
 *   curl 扩展
     您可以通过`php -m`命令查看 curl 扩展是否已经安装好。
-*   安装ELK 6.0+
+*   安装ELK 7.0+
     安装文档https://www.jianshu.com/p/1b1578af7ba0
 
 ## 安装方式 
 ### Composer 方式
 ```
-composer require onming/es-php-sdk ~1.0
+composer require onming/es-php-sdk ~2.0
 ```
 
 ### 使用方法
@@ -67,7 +67,7 @@ $properties = [
         'format' => 'yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis',
     ],
 ];
-$result = $client->createIndex('test_index', 'test_type', $properties);
+$result = $client->createIndex('test_index', $properties);
 var_dump($result);
 // 添加文档
 $body = [
@@ -77,7 +77,7 @@ $body = [
     'position' => ['lon' => 116.111, 'lat' => 39.111],
     'create_at' => date('Y-m-d H:i:s'),
 ];
-$result = $client->insert('test_index', 'test_type', '1', $body);
+$result = $client->insert('test_index', '1', $body);
 var_dump($result);
 $body = [
     'md5' => '222222',
@@ -86,16 +86,16 @@ $body = [
     'position' => ['lon' => 116.222, 'lat' => 39.222],
     'create_at' => date('Y-m-d H:i:s'),
 ];
-$result = $client->insert('test_index', 'test_type', '2', $body);
+$result = $client->insert('test_index', '2', $body);
 var_dump($result);
 // 删除文档
-$result = $client->delete('test_index', 'test_type', '1');
+$result = $client->delete('test_index', '1');
 var_dump($result);
 // 查询所有
-$result = $client->search('test_index', 'test_type', 'all');
+$result = $client->search('test_index', 'all');
 // 按条件查询排序
 $match = ['tag' => '宠物狗'];
 $sort = ['_score' => 'desc'];
-$result = $client->search('test_index', 'test_type', $match, 0, 100, $sort);
+$result = $client->search('test_index', $match, 0, 100, $sort);
 var_dump($result);
 ```

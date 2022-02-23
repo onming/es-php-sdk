@@ -28,13 +28,12 @@ class Client
      * 创建索引
      * 
      * @param string index 索引名称
-     * @param string doc 文档名称
      * @param array properties 数据结构
      * @param int number_of_shards 分片数
      * @param int number_of_replicas 备份数
      * @return bool
      */
-    public function createIndex($index, $doc, $properties, $number_of_shards = 1, $number_of_replicas = 0)
+    public function createIndex($index, $properties, $number_of_shards = 1, $number_of_replicas = 0)
     {
         $params = [
             'settings' => [
@@ -42,7 +41,7 @@ class Client
                 'number_of_replicas' => $number_of_replicas,
             ],
             'mappings' => [
-                $doc => ['properties' => $properties]
+                'properties' => $properties,
             ]
         ];
         $response = $this->sendRequest($index, $params, 'PUT');
@@ -76,15 +75,14 @@ class Client
      * 添加文档
      * 
      * @param string index 索引名称
-     * @param string doc 文档名称
      * @param string id 文档ID
      * @param array body 内容
      * @return string
      */
-    public function insert($index, $doc, $id, $body)
+    public function insert($index, $id, $body)
     {
         $params = $body;
-        $response = $this->sendRequest($index.'/'.$doc.'/'.$id, $params, 'PUT');
+        $response = $this->sendRequest($index.'/_doc/'.$id, $params, 'PUT');
         return !empty($response['_id'])?$response['_id']:'';
     }
 
@@ -92,13 +90,12 @@ class Client
      * 删除文档
      * 
      * @param string index 索引名称
-     * @param string doc 文档名称
      * @param string id 文档ID
      * @return bool
      */
-    public function delete($index, $doc, $id)
+    public function delete($index, $id)
     {
-        $response = $this->sendRequest($index.'/'.$doc.'/'.$id, '', 'DELETE');
+        $response = $this->sendRequest($index.'/'.$id, '', 'DELETE');
         return $response['result']=='deleted'?true:false;
     }
 
@@ -106,14 +103,13 @@ class Client
      * 查询文档
      * 
      * @param string index 索引名称
-     * @param string doc 文档名称
      * @param array match 查询条件
      * @param int from 起始位置
      * @param int size 查询数量
      * @param int sort 排序条件
      * @return array
      */
-    public function search($index, $doc, $match = '', $from = 0, $size = 100, $sort = '')
+    public function search($index, $match = '', $from = 0, $size = 100, $sort = '')
     {
         $params = [
             'query' => [],
@@ -128,10 +124,10 @@ class Client
         if($sort){
             $params['sort'] = $sort;
         }
-        $response = $this->sendRequest($index.'/'.$doc.'/_search', $params, 'POST');
+        $response = $this->sendRequest($index.'/_search', $params, 'POST');
         $result = ['total' => 0, 'list' => []];
         if(!empty($response['hits'])){
-            return ['total' => $response['hits']['total'], 'list' => $response['hits']['hits']];
+            return ['total' => $response['hits']['total']['value'], 'list' => $response['hits']['hits']];
         }
         return $result;
     }
