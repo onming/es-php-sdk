@@ -119,7 +119,7 @@ class Client
         if($match == 'all'){
             $params['query']['match_all'] = new \stdClass();
         }else{
-            $params['query']['match'] = $match;
+            $params['query'] = $match;
         }
         if($sort){
             $params['sort'] = $sort;
